@@ -1,0 +1,56 @@
+//AIzaSyDuGNmpWhs2_zVB59209uNSAiLIK-gJtLY
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Scenario</title>
+    <style>
+        .scenario-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .scenario-card:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Select a Scenario</h1>
+    <div class="scenarios-container">
+        <div class="scenario-card" onclick="selectScenario('rams_father')">
+            <h3>Educational Loan Seeker</h3>
+            <p>Ram's father seeking an educational loan for his son's professional studies</p>
+        </div>
+        
+        <div class="scenario-card" onclick="selectScenario('home_buyer')">
+            <h3>Home Loan Seeker</h3>
+            <p>IT professional looking to buy their first home</p>
+        </div>
+        
+        <div class="scenario-card" onclick="selectScenario('business_owner')">
+            <h3>Business Loan Seeker</h3>
+            <p>Restaurant owner looking to expand their business</p>
+        </div>
+        
+        <div class="scenario-card" onclick="selectScenario('car_buyer')">
+            <h3>Car Loan Seeker</h3>
+            <p>Software engineer interested in buying a new car</p>
+        </div>
+        
+        <div class="scenario-card" onclick="selectScenario('personal_loan')">
+            <h3>Personal Loan Seeker</h3>
+            <p>Government employee seeking loan for daughter's wedding</p>
+        </div>
+    </div>
+
+    <script>
+        function selectScenario(scenario) {
+            window.location.href = `/index?scenario=${scenario}`;
+        }
+    </script>
+</body>
+</html>
