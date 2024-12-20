@@ -1,55 +1,188 @@
-//AIzaSyDuGNmpWhs2_zVB59209uNSAiLIK-gJtLY
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Scenario</title>
+    <title>Scenario Selection</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     <style>
-        .scenario-card {
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin: 10px;
-            border-radius: 5px;
-            cursor: pointer;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
         }
-        .scenario-card:hover {
-            background-color: #f0f0f0;
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #3a506b;
+            color: #ffffff;
+            border-radius: 15px 15px 0 0 !important;
+        }
+        .btn-primary {
+            background-color: #3a506b;
+            border-color: #3a506b;
+        }
+        .btn-primary:hover {
+            background-color: #2c3e50;
+            border-color: #2c3e50;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-top: 1rem;
         }
     </style>
 </head>
 <body>
-    <h1>Select a Scenario</h1>
-    <div class="scenarios-container">
-        <div class="scenario-card" onclick="selectScenario('rams_father')">
-            <h3>Educational Loan Seeker</h3>
-            <p>Ram's father seeking an educational loan for his son's professional studies</p>
-        </div>
-        
-        <div class="scenario-card" onclick="selectScenario('home_buyer')">
-            <h3>Home Loan Seeker</h3>
-            <p>IT professional looking to buy their first home</p>
-        </div>
-        
-        <div class="scenario-card" onclick="selectScenario('business_owner')">
-            <h3>Business Loan Seeker</h3>
-            <p>Restaurant owner looking to expand their business</p>
-        </div>
-        
-        <div class="scenario-card" onclick="selectScenario('car_buyer')">
-            <h3>Car Loan Seeker</h3>
-            <p>Software engineer interested in buying a new car</p>
-        </div>
-        
-        <div class="scenario-card" onclick="selectScenario('personal_loan')">
-            <h3>Personal Loan Seeker</h3>
-            <p>Government employee seeking loan for daughter's wedding</p>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="text-center mb-0">
+                    <i class="fas fa-clipboard-list mr-2"></i>Scenario-Based Questionnaire
+                </h1>
+            </div>
+            <div class="card-body">
+                <div class="instructions mb-4">
+                    <h4><i class="fas fa-info-circle mr-2"></i>Instructions</h4>
+                    <p>Please select an avatar and a scenario from the dropdowns below. Review the instructions carefully and answer the questions displayed in the template.</p>
+                </div>
+                <div class="form-group">
+                    <label for="avatar"><i class="fas fa-user-circle mr-2"></i>Select Avatar:</label>
+                    <select id="avatar" class="form-control">
+                        <option value="">Choose an avatar</option>
+                        <option value="avatar1">Male</option>
+                        <option value="avatar2">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="scenario"><i class="fas fa-sitemap mr-2"></i>Select Scenario:</label>
+                    <select id="scenario" class="form-control" onchange="updateScenarioDetails()">
+                        <option value="">Choose a scenario</option>
+                        <option value="personal">Personal Loan</option>
+                        <option value="home">Home Loan</option>
+                        <option value="car">Car Loan</option>
+                        <option value="education">Educational Loan</option>
+                    </select>
+                </div>
+                <div id="scenario-details" class="mt-4">
+                    <h4><i class="fas fa-question-circle mr-2"></i>Next Question:</h4>
+                    <p class="question">Please select a scenario to see the details.</p>
+                </div>
+                <button class="btn btn-primary btn-block mt-4" onclick="handleStart()">
+                    <i class="fas fa-play mr-2"></i>Start Scenario
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
-        function selectScenario(scenario) {
-            window.location.href = `/index?scenario=${scenario}`;
+        function handleStart() {
+            const avatar = document.getElementById('avatar').value;
+            localStorage.setItem('selectedAvatar', avatar);
+            window.location.href = '/index';
+        }
+
+        function updateScenarioDetails() {
+            const scenario = document.getElementById('scenario').value;
+            const scenarioDetails = document.getElementById('scenario-details');
+            let detailsHTML = '';
+
+            switch (scenario) {
+                case 'personal':
+                    detailsHTML = `
+                        <h2>Next Question:</h2>
+                        <p class="question">Hi, "USER NAME," today you'll pitch the personal loan for the customer "Riya" through a telephone conversation. The details of the personal loan from XYZ Bank are as follows:</p>
+                        <div class="section-title">Product:</div>
+                        <ul>
+                            <li>Loan type: Personal loan</li>
+                            <li>Maximum limit: Rs. 5,00,000</li>
+                            <li>Interest rate: 12% - 10%</li>
+                        </ul>
+                        <div class="section-title">Customer details:</div>
+                        <ul>
+                            <li>Age: 28</li>
+                            <li>CIBIL score: 890</li>
+                            <li>Type of customer: Self-employed</li>
+                            <li>Income per month: Approximately Rs.30,000 monthly</li>
+                            <li>Existing loan: NO</li>
+                        </ul>
+                    `;
+                    break;
+                case 'home':
+                    detailsHTML = `
+                        <h2>Next Question:</h2>
+                        <p class="question">Hi, today you'll pitch the home loan for the customer "Amit" through a telephone conversation. The details of the home loan from XYZ Bank are as follows:</p>
+                        <div class="section-title">Product:</div>
+                        <ul>
+                            <li>Loan type: Home loan</li>
+                            <li>Maximum limit: Rs. 50,00,000</li>
+                            <li>Interest rate: 8% - 7%</li>
+                        </ul>
+                        <div class="section-title">Customer details:</div>
+                        <ul>
+                            <li>Age: 35</li>
+                            <li>CIBIL score: 750</li>
+                            <li>Type of customer: Salaried</li>
+                            <li>Income per month: Approximately Rs.70,000 monthly</li>
+                            <li>Existing loan: YES</li>
+                        </ul>
+                    `;
+                    break;
+                case 'car':
+                    detailsHTML = `
+                        <h2>Next Question:</h2>
+                        <p class="question">Hi, today you'll pitch the car loan for the customer "Suresh" through a telephone conversation. The details of the car loan from XYZ Bank are as follows:</p>
+                        <div class="section-title">Product:</div>
+                        <ul>
+                            <li>Loan type: Car loan</li>
+                            <li>Maximum limit: Rs. 10,00,000</li>
+                            <li>Interest rate: 9% - 7%</li>
+                        </ul>
+                        <div class="section-title">Customer details:</div>
+                        <ul>
+                            <li>Age: 30</li>
+                            <li>CIBIL score: 800</li>
+                            <li>Type of customer: Self-employed</li>
+                            <li>Income per month: Approximately Rs.50,000 monthly</li>
+                            <li>Existing loan: NO</li>
+                        </ul>
+                    `;
+                    break;
+                case 'education':
+                    detailsHTML = `
+                        <h2>Next Question:</h2>
+                        <p class="question">Hi, today you'll pitch the educational loan for the customer "Meera" through a telephone conversation. The details of the educational loan from XYZ Bank are as follows:</p>
+                        <div class="section-title">Product:</div>
+                        <ul>
+                            <li>Loan type: Educational loan</li>
+                            <li>Maximum limit: Rs. 20,00,000</li>
+                            <li>Interest rate: 10% - 8%</li>
+                        </ul>
+                        <div class="section-title">Customer details:</div>
+                        <ul>
+                            <li>Age: 21</li>
+                            <li>CIBIL score: 680</li>
+                            <li>Type of customer: Student</li>
+                            <li>Income per month: Not applicable</li>
+                            <li>Existing loan: NO</li>
+                        </ul>
+                    `;
+                    break;
+                default:
+                    detailsHTML = `
+                        <h2>Next Question:</h2>
+                        <p class="question">Please select a scenario to see the details.</p>
+                    `;
+            }
+
+            scenarioDetails.innerHTML = detailsHTML;
         }
     </script>
 </body>

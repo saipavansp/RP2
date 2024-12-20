@@ -3,354 +3,370 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot Interface</title>
+    <title>Sales Executive Chatbot</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
         }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px,20px;
-            background: #4f4848;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            
+        .navbar {
+            background-color: #3a506b;
+            animation: fadeIn 0.5s ease-out;
         }
-
-        #logo {
-            font-size: 1.5em;
-            font-weight: bold;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-
-        #menu {
-            font-size: 1em;
-        }
-
         .main-container {
-            display: flex;
-            height: calc(100vh - 50px);
+            min-height: calc(100vh - 56px);
+            padding: 2rem 0;
+            opacity: 0;
+            animation: slideUp 0.5s ease-out 0.3s forwards;
         }
-
-        .left-container {
-            width: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-right: 1px solid #ddd;
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        .left-container img {
-            margin-top: 10px;
-    transition: transform 0.3s;
-    width: auto; /* Maintain the original width */
-    height: auto; /* Maintain the original height */
-    max-width: 200%;/*sure it fits within the container */
-    max-height:200%;/* Prevent it from exceeding the container height */
-    object-fit: contain;
+        .chat-card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
-
-        .left-container img:hover {
-            transform: scale(1.1);
+        .chat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
-
-
-        #bot-response {
-            margin-top: 20px;
-            padding: 10px;
-            background: #e0f7fa;
-            border-radius: 5px;
-            width: 80%;
+        .avatar-container {
+            background-color: #e0e7ff;
+            padding: 2rem;
             text-align: center;
         }
-
-        .right-container {
-            width: 50%;
-            display: flex;
-            flex-direction: column;
+        .avatar-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
-
+        .avatar-image:hover {
+            transform: scale(1.05);
+        }
+        .emoji-image {
+            width: 30px;
+            margin-top: 1rem;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        #bot-response, #user-response {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        #bot-response:not(:empty), #user-response:not(:empty) {
+            animation: fadeInLeft 0.5s ease-out;
+        }
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
         #video-container {
-            width: 550px;
-    height: 500px;
-    flex: 1;
-    border: 2px solid #0b0c0c; /* Adds a thicker, colored border */
-    border-radius: 10px; /* Rounds the corners */
-    background-color: #f4f4f9; /* Light background color */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    padding: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
-
-        #record-btn {
-            position: absolute;
-            bottom: 10px;
-            padding: 10px 20px;
-            background: #0288d1;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        #video-container:hover {
+            transform: scale(1.02);
         }
-
-        #chat-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 10px;
+        .btn-primary {
+            background-color: #3a506b;
+            border-color: #3a506b;
+            transition: all 0.3s ease;
         }
-
-        #user-response {
-            margin-top: 20px;
-            padding: 10px;
-            background: #e0f7fa;
-            border-radius: 5px;
-            width: 80%;
-            text-align: center;
+        .btn-primary:hover {
+            background-color: #2c3e50;
+            border-color: #2c3e50;
+            transform: translateY(-2px);
         }
-
+        .btn-danger {
+            background-color: #e74c3c;
+            border-color: #e74c3c;
+            transition: all 0.3s ease;
+        }
+        .btn-danger:hover {
+            background-color: #c0392b;
+            border-color: #c0392b;
+            transform: translateY(-2px);
+        }
+        .input-group {
+            margin-top: 1rem;
+        }
         #message {
-            flex: 1;
-            padding: 10px;
-            margin-right: 10px;
+            transition: all 0.3s ease;
         }
-
-        #send-btn, #mic-btn {
-            padding: 10px 20px;
-            background: #0288d1;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-left: 5px;
+        #message:focus {
+            box-shadow: 0 0 0 0.2rem rgba(58, 80, 107, 0.25);
         }
-
-        #send-btn:hover, #mic-btn:hover, #record-btn:hover {
-            background: #026aa7;
+        .btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 1;
+            }
+            20% {
+                transform: scale(25, 25);
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(40, 40);
+            }
+        }
+        .btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav>
-        <div id="logo">Logo</div>
-        <div id="menu">Menu</div>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-comments mr-2"></i>
+                Sales Executive Chatbot
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-home mr-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-info-circle mr-1"></i> About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
 
-    <!-- Main Content -->
-    <div class="main-container">
-        <!-- Left Container -->
-        <div class="left-container">
-            <img src="static/images/avatar.png" alt="Avatar" style="width: 300px; height: 300px; border-radius: 50%;">
-            <img src="static/images/speaking.png" alt="Speaking Emoji" style="width: 50px;">
-            <div id="bot-response"></div>
-            <br>
-            <br>
-            <br>
-            <button id="End-test" >END TEST</button>
-        </div>
-
-        <!-- Right Container -->
-        <div class="right-container">
-            <!-- Top Section: Video Recording -->
-            <div id="video-container">
-                <video id="video" width="100%" height="100%" autoplay muted></video>
-                <button id="record-btn">Record</button>
+    <div class="container main-container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="chat-card">
+                    <div class="avatar-container">
+                        <img class="avatar-image" src="static/images/avatar.png" alt="Avatar">
+                        <img class="emoji-image" src="static/images/speaking.png" alt="Speaking Emoji">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-3">Bot Response</h5>
+                        <div id="bot-response" class="mb-3"></div>
+                        <button id="end-test" class="btn btn-danger btn-block">
+                            <i class="fas fa-stop-circle mr-2"></i>End Test
+                        </button>
+                    </div>
+                </div>
             </div>
-
-            <!-- Bottom Section: Chat Container -->
-            <div id="chat-container">
-                <div id="user-response"></div>
-                <div style="margin-top: 10px; display: flex; align-items: center;">
-                    <textarea id="message" placeholder="Type your message here..."></textarea>
-                    <button id="send-btn">Send</button>
-                    <button id="mic-btn">
-                        <img src="static/images/mic.png" alt="Mic" style="width: 20px; height: 20px;">
-                    </button>
+            <div class="col-md-8">
+                <div class="chat-card">
+                    <div class="card-body">
+                        <div id="video-container" class="mb-4">
+                            <video id="video" class="w-100" autoplay muted></video>
+                            <button id="record-btn" class="btn btn-primary mt-2">
+                                <i class="fas fa-video mr-2"></i>Record
+                            </button>
+                        </div>
+                        <h5 class="card-title mb-3">User Interaction</h5>
+                        <div id="user-response" class="mb-3"></div>
+                        <div class="input-group">
+                            <textarea id="message" class="form-control" rows="3" placeholder="Type your message here..."></textarea>
+                            <div class="input-group-append">
+                                <button id="send-btn" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane mr-2"></i>Send
+                                </button>
+                                <button id="mic-btn" class="btn btn-secondary">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script>
-        const botResponseContainer = document.getElementById('bot-response');
-        const userResponseContainer = document.getElementById('user-response');
-        const messageInput = document.getElementById('message');
-        const sendButton = document.getElementById('send-btn');
-        const micButton = document.getElementById('mic-btn');
-        const recordButton = document.getElementById('record-btn');
-        const videoElement = document.getElementById('video');
-
-        window.addEventListener('DOMContentLoaded', () => {
-        const avatarImage = document.querySelector('.left-container img');
-
-        // Retrieve the selected avatar from localStorage
-        const selectedAvatar = localStorage.getItem('selectedAvatar');
-
-        // Map the avatar selection to the corresponding image
-        const avatarMap = {
-            avatar1: 'static/images/avatar.png',
-            avatar2: 'static/images/female.png',
-            avatar3: 'static/images/avatar3.png'
-        };
-
-        // Update the avatar image or fallback to default
-        avatarImage.src = avatarMap[selectedAvatar] || 'static/images/avatar.png';
-     });
+const videoElement = document.getElementById('video');
+            const recordButton = document.getElementById('record-btn');   
+            const endTestButton = document.getElementById('end-test');
+            const botResponseDiv = document.getElementById('bot-response'); // Div to show bot response
+            const sendButton = document.getElementById('send-btn'); // Button to send a message
+            const messageInput = document.getElementById('message'); 
+            const micButton = document.getElementById('mic-btn');// Text input for user messages
 
 
+            // Video recording functionality
+                let mediaRecorder;
+                let recordedChunks = [];
+                let isRecording = false;
 
-        let mediaRecorder;
-        let recordedChunks = [];
+                async function startRecording() {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                        videoElement.srcObject = stream;
 
-        // Start the camera
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-            .then((stream) => {
-                videoElement.srcObject = stream;
+                        mediaRecorder = new MediaRecorder(stream);
 
-                recordButton.addEventListener('click', () => {
-                    if (recordButton.textContent === 'Record') {
-                        startRecording(stream);
+                        mediaRecorder.ondataavailable = (event) => {
+                            if (event.data.size > 0) {
+                                recordedChunks.push(event.data);
+                            }
+                        };
+
+                        mediaRecorder.start();
+                        isRecording = true;
                         recordButton.textContent = 'Stop';
-                    } else {
-                        stopRecording();
+                    } catch (error) {
+                        console.error('Error accessing camera:', error);
+                    }
+                }
+
+                function stopRecording() {
+                    if (mediaRecorder && isRecording) {
+                        mediaRecorder.stop();
+
+                        const tracks = videoElement.srcObject.getTracks();
+                        tracks.forEach(track => track.stop());
+
+                        isRecording = false;
                         recordButton.textContent = 'Record';
                     }
-                });
-            })
-            .catch((error) => {
-                console.error('Error accessing camera:', error);
-            });
-
-            function startRecording(stream) {
-            recordedChunks = [];
-            mediaRecorder = new MediaRecorder(stream);
-
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    recordedChunks.push(event.data);
                 }
-            };
 
-            mediaRecorder.onstop = () => {
-                const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                const url = URL.createObjectURL(blob);
-
-                // Download the recorded video
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = url;
-                a.download = 'recording.webm';
-                document.body.appendChild(a);
-                a.click();
-                URL.revokeObjectURL(url);
-            };
-
-            mediaRecorder.start();
-        }
-
-        function stopRecording() {
-            if (mediaRecorder) {
-                mediaRecorder.stop();
-            }
-        }
-
-        const synth = window.speechSynthesis;
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'en-IN';
-        recognition.continuous = true;
-
-        micButton.addEventListener('click', () => {
-            if (micButton.textContent === '🎤') {
-                recognition.start();
-                micButton.textContent = '🔴'; // Indicate mic is active
-            } else {
-                recognition.stop();
-                micButton.textContent = '🎤'; // Indicate mic is off
-            }
-        });
-
-        recognition.onresult = (event) => {
-            const transcript = event.results[event.results.length - 1][0].transcript;
-            messageInput.value = transcript;
-            // Automatically send the transcribed message
-            handleTranscribedMessage(transcript);
-        };
-
-        recognition.onerror = (event) => {
-            console.error('Speech recognition error:', event.error);
-        };
-
-        recognition.onend = () => {
-            console.log('Speech recognition ended');
-        };
-        // Send Message
-        // Handle Transcribed Message
-        async function handleTranscribedMessage(transcript) {
-            const userMessage = transcript;
-            if (!userMessage.trim()) return;
-
-            // Show user message temporarily
-            const tempMessage = document.createElement('div');
-            tempMessage.style.cssText = 'text-align: right; background: #f1f8e9; margin: 5px; padding: 10px; border-radius: 5px;';
-            tempMessage.textContent = userMessage;
-            userResponseContainer.appendChild(tempMessage);
-
-            try {
-                const response = await fetch('/api', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ message: userMessage }),
+                recordButton.addEventListener('click', () => {
+                    if (!isRecording) {
+                        startRecording();
+                    } else {
+                        stopRecording();
+                    }
                 });
+           
+                                // End test session functionality
+                endTestButton.addEventListener('click', async () => {
+                    try {
+                        const response = await fetch('/end_session', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        });
 
-                const data = await response.json();
-                botResponseContainer.innerHTML = data.response;
+                        const data = await response.json();
 
-                // Remove the temporary user message after sending
-                userResponseContainer.innerHTML = '';
+                        if (data.error) {
+                            console.error("Error ending session:", data.error);
+                            alert("Failed to end session: " + data.error);
+                            return;
+                        }
 
-                // Text-to-Speech
-                const utterance = new SpeechSynthesisUtterance(data.response);
-                synth.speak(utterance);
-            } catch (error) {
-                console.error('Error:', error);
-            }
-
-            messageInput.value = '';
-        };
-     // Trigger End Session API
-     document.getElementById('End-test').addEventListener('click', async () => {
-            try {
-                const response = await fetch('/end_session', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
+                        window.location.href = `/summary?text=${encodeURIComponent(data.summary)}`;
+                    } catch (error) {
+                        console.error("Failed to end session:", error);
                     }
                 });
 
-                const data = await response.json();
-                if (data.error) {
-                    console.error("Error ending session:", data.error);
-                    alert("Failed to end session: " + data.error);
-                    return;
+            // Function to convert text to speech
+            function speakText(text) {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US'; // Language setting
+                    utterance.pitch = 1; // Adjust pitch
+                    utterance.rate = 1; // Adjust speaking rate
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    console.error('SpeechSynthesis API not supported in this browser.');
                 }
-
-                // Redirect to summary page with summary text as a query parameter
-                window.location.href = `/summary?text=${encodeURIComponent(data.summary)}`;
-            } catch (error) {
-                console.error("Failed to end session:", error);
             }
-        });  
+    
+            // Function to send a message to the server and handle the response
+            async function sendMessage() {
+                const userMessage = messageInput.value.trim();
+                if (!userMessage) return;
+    
+                try {
+                    // Send user message to the server
+                    const response = await fetch('/api', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: userMessage }),
+                    });
+                    const data = await response.json();
+    
+                    // Display bot response
+                    botResponseDiv.textContent = data.response;
+    
+                    // Convert bot response to speech
+                    speakText(data.response);
+                } catch (error) {
+                    console.error('Error in fetching bot response:', error);
+                }
+            }
+    
+            // Attach event listeners
+            sendButton.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        
 
     </script>
+    
 </body>
 </html>

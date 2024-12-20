@@ -4,33 +4,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conversation Summary</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
         }
-        #summary-container {
-            border: 1px solid #ddd;
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #3a506b;
+            color: #ffffff;
+            border-radius: 15px 15px 0 0 !important;
+        }
+        .btn-primary {
+            background-color: #3a506b;
+            border-color: #3a506b;
+        }
+        .btn-primary:hover {
+            background-color: #2c3e50;
+            border-color: #2c3e50;
+        }
+        .btn-secondary {
+            background-color: #95a5a6;
+            border-color: #95a5a6;
+        }
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+            border-color: #7f8c8d;
+        }
+        pre {
+            background-color: #f8f9fa;
             border-radius: 5px;
-            padding: 20px;
-            background-color: #f9f9f9;
+            padding: 1rem;
         }
     </style>
 </head>
 <body>
-    <h1>Conversation Summary</h1>
-    <div id="summary-container"></div>
-    <div id="session-details">
-        <h2>Session Details</h2>
-        <p><strong>Session ID:</strong>{{ session_id}}</p>
-        <h3>Session Data:</h3>
-        <pre>{{ session_data | tojson(indent=2) }}</pre> 
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center mb-0">
+                    <i class="fas fa-file-alt mr-2"></i>Conversation Summary
+                </h2>
+            </div>
+            <div class="card-body">
+                <div class="summary mb-4">
+                    <h4><i class="fas fa-chart-bar mr-2"></i>Summary</h4>
+                    <p id="summary-container">Loading summary...</p>
+                </div>
+
+                <div class="session-details mt-4">
+                    <h4><i class="fas fa-info-circle mr-2"></i>Session Details</h4>
+                    <p><strong>Session ID:</strong> <span id="session-id">Unavailable</span></p>
+                    <h5><i class="fas fa-database mr-2"></i>Session Data:</h5>
+                    <pre id="session-data">Loading...</pre>
+                </div>
+
+                <div class="buttons mt-4">
+                    <button class="btn btn-primary" onclick="handleExportPDF()">
+                        <i class="fas fa-file-pdf mr-2"></i>Export to PDF
+                    </button>
+                    <button class="btn btn-secondary" onclick="handleGoHome()">
+                        <i class="fas fa-home mr-2"></i>Go to Home
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
+
+
     <script>
-        // Fetch and display the summary from the query parameter
-        const params = new URLSearchParams(window.location.search);
-        const summaryText = params.get('text');
-        document.getElementById('summary-container').textContent = summaryText || "No summary available.";
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const summaryText = params.get('text') || "No summary available.";
+            document.getElementById('summary-container').textContent = summaryText;
+
+            fetch('/summary')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('session-id').textContent = data.session_id || "Unavailable";
+                    document.getElementById('session-data').textContent = JSON.stringify(data.session_data, null, 2);
+                })
+                .catch(error => {
+                    console.error("Error fetching session data:", error);
+                });
+        });
+
+        function handleExportPDF() {
+            alert('Export to PDF functionality is not yet implemented.');
+        }
+
+        function handleGoHome() {
+            window.location.href = '/';
+        }
     </script>
 </body>
 </html>
