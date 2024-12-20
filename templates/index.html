@@ -248,6 +248,47 @@ const videoElement = document.getElementById('video');
             const messageInput = document.getElementById('message'); 
             const micButton = document.getElementById('mic-btn');// Text input for user messages
 
+let recognition;
+
+if ('webkitSpeechRecognition' in window) {
+    recognition = new webkitSpeechRecognition();
+    recognition.continuous = false; // Stops automatically after speaking
+    recognition.interimResults = false; // Only final results
+    recognition.lang = 'en-US'; // Set language
+
+    recognition.onstart = () => {
+        console.log('Voice recognition started');
+        micButton.classList.add('listening');
+    };
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        console.log('Transcript:', transcript);
+        messageInput.value = transcript; // Set the transcribed text in the input field
+        sendMessage(); // Automatically send the transcribed text
+    };
+
+    recognition.onerror = (event) => {
+        console.error('Voice recognition error:', event.error);
+    };
+
+    recognition.onend = () => {
+        console.log('Voice recognition ended');
+        micButton.classList.remove('listening');
+    };
+} else {
+    console.error('Web Speech API not supported in this browser.');
+}
+
+micButton.addEventListener('click', () => {
+    if (recognition) {
+        recognition.start();
+    } else {
+        alert('Web Speech API is not supported in your browser.');
+    }
+});
+
+
 
             // Video recording functionality
                 let mediaRecorder;
@@ -367,6 +408,5 @@ const videoElement = document.getElementById('video');
         
 
     </script>
-    
 </body>
 </html>
