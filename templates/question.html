@@ -41,11 +41,33 @@
     </style>
 </head>
 <body>
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000; width: 100%;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            Cognitive
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-home mr-1"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-info-circle mr-1"></i> About</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
     <div class="container">
         <div class="card">
             <div class="card-header">
                 <h1 class="text-center mb-0">
-                    <i class="fas fa-clipboard-list mr-2"></i>Scenario-Based Questionnaire
+                    <i class="fas fa-clipboard-list mr-2"></i>Scenario-Based Role Play
                 </h1>
             </div>
             <div class="card-body">
@@ -72,7 +94,6 @@
                     </select>
                 </div>
                 <div id="scenario-details" class="mt-4">
-                    <h4><i class="fas fa-question-circle mr-2"></i>Next Question:</h4>
                     <p class="question">Please select a scenario to see the details.</p>
                 </div>
                 <button class="btn btn-primary btn-block mt-4" onclick="handleStart()">
@@ -97,8 +118,8 @@
             switch (scenario) {
                 case 'personal':
                     detailsHTML = `
-                        <h2>Next Question:</h2>
-                        <p class="question">Hi, "USER NAME," today you'll pitch the personal loan for the customer "Riya" through a telephone conversation. The details of the personal loan from XYZ Bank are as follows:</p>
+                        <h2>The Scenario</h2>
+                        <p class="question">Hi,  today you'll pitch the personal loan for the customer "Riya" through a telephone conversation. The details of the personal loan from XYZ Bank are as follows:</p>
                         <div class="section-title">Product:</div>
                         <ul>
                             <li>Loan type: Personal loan</li>
@@ -137,7 +158,7 @@
                     break;
                 case 'car':
                     detailsHTML = `
-                        <h2>Next Question:</h2>
+                        <h2>The Scenario</h2>
                         <p class="question">Hi, today you'll pitch the car loan for the customer "Suresh" through a telephone conversation. The details of the car loan from XYZ Bank are as follows:</p>
                         <div class="section-title">Product:</div>
                         <ul>
@@ -157,7 +178,7 @@
                     break;
                 case 'education':
                     detailsHTML = `
-                        <h2>Next Question:</h2>
+                        <h2>The Scenario</h2>
                         <p class="question">Hi, today you'll pitch the educational loan for the customer "Meera" through a telephone conversation. The details of the educational loan from XYZ Bank are as follows:</p>
                         <div class="section-title">Product:</div>
                         <ul>
@@ -177,7 +198,7 @@
                     break;
                 default:
                     detailsHTML = `
-                        <h2>Next Question:</h2>
+                        <h2>The Scenario</h2>
                         <p class="question">Please select a scenario to see the details.</p>
                     `;
             }
